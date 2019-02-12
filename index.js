@@ -53,12 +53,42 @@ server.post('/api/notes', (req, res)=>{
     }
 })
 
+// TODO: may need return the updated note
 server.put('/api/notes/:id', (req, res)=>{
-    res.status(200).json({message: 'Edit note return id'})
+    const {id} = req.params;
+    const note = req.body;
+    db('notes')
+    .where('id', Number(id))
+    .update(note)
+    .then(count=>{
+        if(count){
+            res.status(200).json({id: id});
+        }
+        else{
+            res.status(404).json({errorMessage: 'Note not found'});
+        }
+    })
+    .catch(error=>{
+        res.status(500).json({error: 'Failed to update note'});
+    })
 })
 
 server.delete('/api/notes/:id', (req, res)=>{
-    res.status(200).json({message: 'Delete note return id'})
+    const {id} = req.params;
+    db('notes')
+    .where('id', Number(id))
+    .del()
+    .then(count=>{
+        if(count){
+            res.status(200).json({id: id});
+        }
+        else{
+            res.status(404).json({errorMessage: 'Note not found'});
+        }
+    })
+    .catch(error=>{
+        res.status(500).json({error: 'Failed to delete note'});
+    })
 })
 
 server.listen(PORT, function(){
