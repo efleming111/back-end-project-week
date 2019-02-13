@@ -1,13 +1,15 @@
 const express = require('express');
 const knex = require('knex');
 const knexConfig = require('./knexfile');
+const cors = require('cors');
 
 const server = express();
 const db = knex(knexConfig.development);
 
 server.use(express.json());
+server.use(cors());
 
-const PORT = 3000;
+const PORT = 4000;
 
 server.get('/api/notes', (req, res)=>{
     db('notes')
@@ -53,7 +55,6 @@ server.post('/api/notes', (req, res)=>{
     }
 })
 
-// TODO: may need return the updated note
 server.put('/api/notes/:id', (req, res)=>{
     const {id} = req.params;
     const note = req.body;
@@ -62,7 +63,11 @@ server.put('/api/notes/:id', (req, res)=>{
     .update(note)
     .then(count=>{
         if(count){
-            res.status(200).json({id: id});
+            db('notes')
+            .where('id', Number(id))
+            .then(note=>{
+                res.status(200).json({note: note[0]});
+            })
         }
         else{
             res.status(404).json({errorMessage: 'Note not found'});
