@@ -9,7 +9,7 @@ const db = knex(knexConfig.development);
 server.use(express.json());
 server.use(cors());
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 server.get('/api/notes', (req, res)=>{
     db('notes')
