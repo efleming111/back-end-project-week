@@ -11,18 +11,24 @@ const db = knex(knexConfig.production || knexConfig.development);
 server.use(express.json());
 server.use(cors());
 
-// passport.use(new GoogleStrategy({
-//     clientID: '',
-//     clientSecert: ''
-// }), ()=>{
+passport.use(new GoogleStrategy({
+        callbackURL: 'auth/google/redirect',
+        clientID: process.env.GoogleID,
+        clientSecert: process.env.GoogleS
+    }, 
+    ()=>{
 
-// });
+    })
+);
 
 const PORT = process.env.PORT || 4000;
 
+server.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile']
+}))
 
-server.get('/auth/google', (req, res)=>{
-    res.json({val1: process.env.GoogleID, val2: process.env.GoogleS})
+server.get('/auth/google/redirect', (req, res)=>{
+    res.json({message: 'Success'})
 })
 
 server.get('/api/notes', (req, res)=>{
