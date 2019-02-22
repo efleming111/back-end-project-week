@@ -9,7 +9,7 @@ const server = express();
 const db = knex(knexConfig.production || knexConfig.development);
 
 passport.use(new GoogleStrategy({
-        callbackURL: '/auth/google/redirect',
+        callbackURL: "/auth/google/redirect",
         clientID: process.env.GoogleID,
         clientSecert: process.env.GoogleS
     }, 
