@@ -13,8 +13,8 @@ passport.use(new GoogleStrategy({
         clientID: process.env.GoogleID,
         clientSecert: process.env.GoogleS
     }, 
-    ()=>{
-
+    (accessToken, refreshToken, profile, cb)=>{
+        return cb(null, profile);
     })
 );
 
@@ -23,13 +23,11 @@ server.use(cors());
 
 const PORT = process.env.PORT || 4000;
 
-server.get('/auth/google', passport.authenticate('google', {
-    scope: ['profile']
-}))
+server.get('/auth/google', passport.authenticate('google'))
 
-server.get('/auth/google/redirect', (req, res)=>{
-    res.json({message: 'Success'})
-})
+server.get('/auth/google/redirect', passport.authenticate('google', (req, res)=>{
+    res.json({message: success});
+}))
 
 server.get('/api/notes', (req, res)=>{
     db('notes')
