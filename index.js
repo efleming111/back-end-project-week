@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 4000;
 server.get('/auth/google', passport.authenticate('google'))
 
 server.get('/auth/google/redirect', passport.authenticate('google', (req, res)=>{
-    res.json({message: success});
+    res.json({message: 'success'});
 }))
 
 server.get('/api/notes', (req, res)=>{
