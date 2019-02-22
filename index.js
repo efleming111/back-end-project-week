@@ -8,9 +8,6 @@ const GoogleStrategy = require('passport-google-oauth20');
 const server = express();
 const db = knex(knexConfig.production || knexConfig.development);
 
-server.use(express.json());
-server.use(cors());
-
 passport.use(new GoogleStrategy({
         callbackURL: 'auth/google/redirect',
         clientID: process.env.GoogleID,
@@ -20,6 +17,9 @@ passport.use(new GoogleStrategy({
 
     })
 );
+
+server.use(express.json());
+server.use(cors());
 
 const PORT = process.env.PORT || 4000;
 
