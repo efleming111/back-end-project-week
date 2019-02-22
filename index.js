@@ -2,32 +2,32 @@ const express = require('express');
 const knex = require('knex');
 const knexConfig = require('./knexfile');
 const cors = require('cors');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20');
+// const passport = require('passport');
+// const GoogleStrategy = require('passport-google-oauth20');
 
 const server = express();
 const db = knex(knexConfig.production || knexConfig.development);
 
-passport.use(new GoogleStrategy({
-        callbackURL: "/auth/google/redirect",
-        clientID: process.env.GoogleID,
-        clientSecert: process.env.GoogleS
-    }, 
-    (accessToken, refreshToken, profile, cb)=>{
-        return cb(null, profile);
-    })
-);
+// passport.use(new GoogleStrategy({
+//         callbackURL: "/auth/google/redirect",
+//         clientID: process.env.GoogleID,
+//         clientSecert: process.env.GoogleS
+//     }, 
+//     (accessToken, refreshToken, profile, cb)=>{
+//         return cb(null, profile);
+//     })
+// );
 
 server.use(express.json());
 server.use(cors());
 
 const PORT = process.env.PORT || 4000;
 
-server.get('/auth/google', passport.authenticate('google'))
+// server.get('/auth/google', passport.authenticate('google'))
 
-server.get('/auth/google/redirect', passport.authenticate('google', (req, res)=>{
-    res.json({message: 'success'});
-}))
+// server.get('/auth/google/redirect', passport.authenticate('google', (req, res)=>{
+//     res.json({message: 'success'});
+// }))
 
 server.get('/api/notes', (req, res)=>{
     db('notes')
