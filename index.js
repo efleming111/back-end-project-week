@@ -2,6 +2,8 @@ const express = require('express');
 const knex = require('knex');
 const knexConfig = require('./knexfile');
 const cors = require('cors');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20');
 
 const server = express();
 const db = knex(knexConfig.production || knexConfig.development);
@@ -9,7 +11,19 @@ const db = knex(knexConfig.production || knexConfig.development);
 server.use(express.json());
 server.use(cors());
 
+// passport.use(new GoogleStrategy({
+//     clientID: '',
+//     clientSecert: ''
+// }), ()=>{
+
+// });
+
 const PORT = process.env.PORT || 4000;
+
+
+server.get('/auth/google', (req, res)=>{
+    res.json({val1: process.env.GoogleID, val2: process.env.GoogleS})
+})
 
 server.get('/api/notes', (req, res)=>{
     db('notes')
